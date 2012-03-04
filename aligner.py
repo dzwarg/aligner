@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# Author: David Zwarg, http://www.zwarg.com/
+# Copyright (c) 2012 David Zwarg
+# david.zwarg@gmail.com
+# http://www.zwarg.com/
 #
 # An image alignment tool.  This tool will allow one to cycle through
 # a folder full of images, and nudge each image individually.
@@ -18,7 +20,16 @@ from optparse import OptionParser;
 import glob;
 
 class Aligner:
+	"""
+	Create a class for the main application.
+	"""
 	def __init__(self, folder):
+		"""
+		Intialize the Aligner class. Load the image files, create
+		the window and context, and show the first image.
+		
+		@param folder: The folder name from where to load images.
+		"""
 		self.changed = False;
 		self.files = glob.glob( folder + "*.jpg" );
 		if ( len(self.files) < 2 ):
@@ -50,9 +61,15 @@ class Aligner:
 		self.window.show();
 
 	def destroy(self, widget, data=None):
+		"""
+		Quit the application.
+		"""
 		gtk.main_quit();
 
 	def keypress(self, widget, data):
+		"""
+		Respond to a key press event.
+		"""
 		context = self.status.get_context_id("statusbar");
 		if (data.hardware_keycode == 100):
 			self.wrap( self.files[self.index], -1, 0 );
@@ -104,6 +121,13 @@ class Aligner:
 			print data.hardware_keycode;
 
 	def wrap(self, img, x, y):
+		"""
+		Wrap an image pixel data around it's edge.
+		
+		@param img: The image. Seems to be ignored.
+		@param x: The amount to shift in the X coordinate.
+		@param y: The amount to shift in the Y coordinate.
+		"""
 		pixbuf0 = self.image.get_pixbuf();
 		pixbuf1 = gtk.gdk.Pixbuf( gtk.gdk.COLORSPACE_RGB, False, 8, pixbuf0.get_width(), pixbuf0.get_height() );
 		
@@ -127,6 +151,9 @@ class Aligner:
 		self.image.show();
 		
 	def main(self):
+		"""
+		The main loop for this class
+		"""
 		gtk.main();
 
 if __name__ == "__main__":
