@@ -9,8 +9,8 @@
 # Pass in a directory full of images with the -i command line option.
 #
 # Commands:
-#    next image: PgDn
-#    prev image: PgUp
+#    next image: Page_Down
+#    prev image: Page_Up
 #    nugde: arrow keys (Left, Right, Down, Up)
 #    quit: Esc
 
@@ -72,15 +72,16 @@ class Aligner:
         Respond to a key press event.
         """
         context = self.status.get_context_id("statusbar")
-        if (data.hardware_keycode == 100):
+        keyname = gtk.gdk.keyval_name(data.keyval)
+        if keyname == 'Up':
             self.wrap( self.files[self.index], -1, 0 )
-        elif (data.hardware_keycode == 102):
+        elif keyname == 'Down':
             self.wrap( self.files[self.index], 1, 0 )
-        elif (data.hardware_keycode == 98):
+        elif keyname == 'Left':
             self.wrap( self.files[self.index], 0, -1 )
-        elif (data.hardware_keycode == 104):
+        elif keyname == 'Right':
             self.wrap( self.files[self.index], 0, 1 )
-        elif (data.hardware_keycode == 105):
+        elif keyname == 'Page_Down':
             if ( self.changed ):
                 pixbuf = self.image.get_pixbuf()
                 pixbuf.save(self.files[self.index], "jpeg", {"quality":"100"})
@@ -96,7 +97,7 @@ class Aligner:
             
             self.image.set_from_file( self.files[self.index] )
             self.image.show()
-        elif (data.hardware_keycode == 99):
+        elif keyname == 'Page_Up':
             if ( self.changed ):
                 pixbuf = self.image.get_pixbuf()
                 pixbuf.save(self.files[self.index], "jpeg", {"quality":"100"})
@@ -112,15 +113,10 @@ class Aligner:
 
             self.image.set_from_file( self.files[self.index] )
             self.image.show()
-        elif (data.hardware_keycode == 9):
+        elif keyname == 'Esc':
             gtk.main_quit()
-        elif (data.hardware_keycode == 21):
-            print "More Opaque"
-        elif (data.hardware_keycode == 20):
-            print "More Transparent"
         else:
-            print gtk.gdk.keyval_name(data.keyval)
-            print data.hardware_keycode
+            print 'Unrecognized keycode/keyname: %d/%s' % (data.hardware_keycode, keyname)
 
     def wrap(self, img, x, y):
         """
