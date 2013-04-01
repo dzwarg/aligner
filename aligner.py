@@ -73,13 +73,13 @@ class Aligner:
         """
         context = self.status.get_context_id("statusbar")
         keyname = gtk.gdk.keyval_name(data.keyval)
-        if keyname == 'Up':
+        if keyname == 'Left':
             self.wrap( self.files[self.index], -1, 0 )
-        elif keyname == 'Down':
-            self.wrap( self.files[self.index], 1, 0 )
-        elif keyname == 'Left':
-            self.wrap( self.files[self.index], 0, -1 )
         elif keyname == 'Right':
+            self.wrap( self.files[self.index], 1, 0 )
+        elif keyname == 'Up':
+            self.wrap( self.files[self.index], 0, -1 )
+        elif keyname == 'Down':
             self.wrap( self.files[self.index], 0, 1 )
         elif keyname == 'Page_Down':
             if ( self.changed ):
@@ -113,7 +113,7 @@ class Aligner:
 
             self.image.set_from_file( self.files[self.index] )
             self.image.show()
-        elif keyname == 'Esc':
+        elif keyname == 'Escape':
             gtk.main_quit()
         else:
             print 'Unrecognized keycode/keyname: %d/%s' % (data.hardware_keycode, keyname)
