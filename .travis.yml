@@ -1,0 +1,17 @@
+language: python
+python: 
+  - "2.7"
+before_install:
+  - "sudo apt-get -y install build-essential gcc python-dev pkg-config libglib2.0-dev python-gobject-2-dev"
+  - "wget http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.24/pygtk-2.24.0.tar.bz2"
+  - "tar -jxf pygtk*"
+  - "cd pygtk-2.24.0"
+  - "./configure"
+  - "make"
+  - "sudo make install"
+  - "export DISPLAY=:99.0"
+  - "sudo /sbin/start-stop-daemon --start --quiet --pidfile /var/run/xvfb.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+install:
+  - "pip install -r requirements.txt --use-mirrors"
+script:
+  - "nosetests --with-doctest --with-coverage --cover-package=aligner"
