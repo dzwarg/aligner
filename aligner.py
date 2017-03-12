@@ -33,8 +33,8 @@ class Aligner:
         """
         self.changed = False
         self.files = glob.glob( folder + '/*.jpg' )
-        if ( len(self.files) < 2 ):
-            exit(2)
+        if len(self.files) < 2:
+            raise IOError('No files found in the input folder.')
             
         self.files.sort()
         self.index = 0
@@ -82,12 +82,12 @@ class Aligner:
         elif keyname == 'Down':
             self.wrap( self.files[self.index], 0, 1 )
         elif keyname == 'Page_Down':
-            if ( self.changed ):
+            if self.changed:
                 pixbuf = self.image.get_pixbuf()
                 pixbuf.save(self.files[self.index], "jpeg", {"quality":"100"})
                 self.changed = False
 
-            if ( self.index == len(self.files) - 1 ):
+            if self.index == len(self.files) - 1:
                 self.index = 0
             else:
                 self.index += 1
@@ -98,12 +98,12 @@ class Aligner:
             self.image.set_from_file( self.files[self.index] )
             self.image.show()
         elif keyname == 'Page_Up':
-            if ( self.changed ):
+            if self.changed:
                 pixbuf = self.image.get_pixbuf()
                 pixbuf.save(self.files[self.index], "jpeg", {"quality":"100"})
                 self.changed = False
 
-            if (self.index == 0):
+            if self.index == 0:
                 self.index = len(self.files) - 1
             else:
                 self.index -= 1
@@ -130,17 +130,17 @@ class Aligner:
         pixbuf1 = gtk.gdk.Pixbuf( gtk.gdk.COLORSPACE_RGB, False, 8, pixbuf0.get_width(), pixbuf0.get_height() )
         
         # twiddle the bits
-        if ( x == 0 ):
-            if ( y < 0 ):
+        if x == 0:
+            if y < 0:
                 pixbuf0.copy_area( x, 1, pixbuf0.get_width(), pixbuf0.get_height()-1, pixbuf1, x, 0 )
                 pixbuf0.copy_area( x, 0, pixbuf0.get_width(), 1, pixbuf1, x, pixbuf0.get_height()-1 )
-            else: # ( y > 0 ):        
+            else: # y > 0:        
                 pixbuf0.copy_area( x, 0, pixbuf0.get_width(), pixbuf0.get_height()-1, pixbuf1, x, 1 )
                 pixbuf0.copy_area( x, pixbuf0.get_height()-1, pixbuf0.get_width(), 1, pixbuf1, x, 0 )
-        elif ( x < 0 ):
+        elif x < 0:
             pixbuf0.copy_area( 0, y, 1, pixbuf0.get_height(), pixbuf1, pixbuf0.get_width()-1, y )
             pixbuf0.copy_area( 1, y, pixbuf0.get_width()-1, pixbuf0.get_height(), pixbuf1, 0, y )
-        else: # ( x > 0 ):        
+        else: # x > 0:        
             pixbuf0.copy_area( 0, y, pixbuf0.get_width()-1, pixbuf0.get_height(), pixbuf1, 1, y )
             pixbuf0.copy_area( pixbuf0.get_width()-1, y, 1, pixbuf0.get_height(), pixbuf1, 0, y )
 
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     oParser.add_option("-i","--input",dest="input", help="specify an input folder")
     (options, args) = oParser.parse_args()
     
-    if (options.input is None):
+    if options.input is None:
         print "Please provide an input folder with -i or --input"
         exit(1)
 
